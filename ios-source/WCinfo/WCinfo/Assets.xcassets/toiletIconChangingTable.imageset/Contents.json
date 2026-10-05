@@ -1,0 +1,13 @@
+{
+  "images" : [
+    {
+      "filename" : "toiletIconChangingTable.png",
+      "idiom" : "universal",
+      "template-rendering-intent" : "template"
+    }
+  ],
+  "info" : {
+    "author" : "xcode",
+    "version" : 1
+  }
+}

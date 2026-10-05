@@ -1,0 +1,898 @@
+import SwiftUI
+import CoreLocation
+
+struct UpdateScreen: View {
+    @Environment(\.dismiss) private var dismiss
+    let location: SearchedLocation?
+    var toilet: Toilet? = nil
+    var onToiletCreated: (() -> Void)? = nil
+    var onToiletUpdated: (() -> Void)? = nil
+
+    @StateObject private var placesService = PlacesService()
+
+    @State private var belongsToPlace = true
+    @State private var nearbyPlaces: [NearbyPlaceOption] = []
+    @State private var selectedPlace: NearbyPlaceOption?
+    @State private var isLoadingPlaces = false
+    @State private var placesError: String?
+
+    @State private var toiletName = ""
+    @State private var isGenderSeparated = false
+    @State private var hasChangingTable = false
+    @State private var hasWheelchairAccess = false
+    @State private var hasEuroKey = false
+    @State private var isPublicAccessible = false
+    @State private var accessibleOutsideOpeningTimes = false
+    @State private var storageSpace: String = "none"
+    @State private var comment = ""
+    @State private var showingEuroKeyInfo = false
+
+    @State private var hasOpeningTimes = false
+    @State private var placeOpeningHours: [GooglePlacesPeriod]?
+
+    @State private var website = ""
+    @State private var address = ""
+    @State private var placeCoordinates: CLLocationCoordinate2D?
+
+    @State private var isSubmitting = false
+    @State private var validationError: String?
+    @State private var showingSuccessAlert = false
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    placeAssociationSection
+
+                    if let placesError {
+                        HStack(alignment: .top, spacing: 8) {
+                            Image(systemName: "exclamationmark.triangle.fill")
+                                .foregroundColor(.orange)
+                                .font(.caption)
+                            Text(placesError)
+                                .font(.caption)
+                                .foregroundColor(.secondary)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                            Button {
+                                Task { await loadInitialData() }
+                            } label: {
+                                Text("Erneut versuchen")
+                                    .font(.caption.bold())
+                                    .foregroundColor(.purple)
+                            }
+                        }
+                        .padding(10)
+                        .background(Color.orange.opacity(0.1))
+                        .clipShape(RoundedRectangle(cornerRadius: 8))
+                    }
+
+                    toiletNameSection
+
+                    propertiesSection
+
+                    storageSpaceSection
+
+                    openingTimesSection
+
+                    locationPickerSection
+
+                    addressSection
+
+                    websiteSection
+
+                    commentSection
+
+                    if let validationError {
+                        Text(validationError)
+                            .font(.caption)
+                            .foregroundColor(.red)
+                            .accessibilityLabel(Text("Fehler: \(validationError)"))
+                    }
+
+                    submitButton
+                }
+                .padding(.horizontal, 16)
+                .padding(.vertical, 16)
+            }
+            .navigationTitle(toilet != nil ? Text("Änderungen vorschlagen") : Text("Toilette hinzufügen"))
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .cancellationAction) {
+                    Button("Abbrechen") {
+                        dismiss()
+                    }
+                    .accessibilityLabel(Text("Abbrechen"))
+                }
+            }
+            .sheet(isPresented: $showingEuroKeyInfo) {
+                EuroKeyInfoView()
+            }
+            .alert("Änderungen gespeichert", isPresented: $showingSuccessAlert) {
+                Button("OK") {
+                    if toilet != nil {
+                        onToiletUpdated?()
+                    } else {
+                        onToiletCreated?()
+                    }
+                    dismiss()
+                }
+            } message: {
+                Text("Deine Änderungen sind sofort sichtbar, werden aber zusätzlich von unserem Team überprüft.")
+            }
+            .onChange(of: hasWheelchairAccess) { _, newValue in
+                if !newValue {
+                    hasEuroKey = false
+                }
+            }
+            .task {
+                await loadInitialData()
+            }
+            .onAppear {
+                Analytics.shared.trackScreen(toilet != nil ? "UpdateToilet" : "CreateToilet")
+            }
+        }
+    }
+
+    // MARK: - Section 1: Place Association ("Toilette gehört zum Ort")
+
+    private var placeAssociationSection: some View {
+        HStack(spacing: 12) {
+            Button {
+                belongsToPlace.toggle()
+                if !belongsToPlace {
+                    selectedPlace = nil
+                } else if selectedPlace == nil, let first = nearbyPlaces.first {
+                    selectPlace(first)
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    checkboxView(isChecked: belongsToPlace)
+                    Text("Toilette gehört zum Ort")
+                        .font(.subheadline.weight(.medium))
+                        .foregroundStyle(.primary)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(belongsToPlace ? "Toilette gehört zum Ort: Ausgewählt" : "Toilette gehört zum Ort: Nicht ausgewählt"))
+            .accessibilityHint(Text("Umschalten, ob die Toilette zu einer bestimmten Einrichtung gehört."))
+
+            Spacer()
+
+            if belongsToPlace {
+                placeDropdownMenu
+            }
+        }
+    }
+
+    private var placeDropdownMenu: some View {
+        Menu {
+            if isLoadingPlaces {
+                Text("Orte werden geladen...")
+            } else if nearbyPlaces.isEmpty {
+                Text("Keine Orte in der Nähe gefunden")
+            } else {
+                ForEach(nearbyPlaces) { place in
+                    Button {
+                        selectPlace(place)
+                    } label: {
+                        if place.id == selectedPlace?.id {
+                            Label(place.name, systemImage: "checkmark")
+                        } else {
+                            Text(place.name)
+                        }
+                    }
+                }
+            }
+        } label: {
+            HStack(spacing: 6) {
+                if let name = selectedPlace?.name {
+                    Text(verbatim: name)
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 160, alignment: .leading)
+                } else if isLoadingPlaces {
+                    Text("Laden...")
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 160, alignment: .leading)
+                } else {
+                    Text("Ort wählen")
+                        .font(.subheadline)
+                        .foregroundStyle(.primary)
+                        .lineLimit(1)
+                        .truncationMode(.tail)
+                        .frame(maxWidth: 160, alignment: .leading)
+                }
+
+                Image(systemName: "chevron.down")
+                    .font(.caption.bold())
+                    .foregroundColor(.purple)
+            }
+            .padding(.horizontal, 10)
+            .padding(.vertical, 7)
+            .background(Color(uiColor: .systemBackground))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.purple, lineWidth: 1.5)
+            )
+        }
+        .accessibilityLabel(Text(selectedPlace?.name != nil ? "Ort auswählen: \(selectedPlace!.name)" : "Ort auswählen"))
+    }
+
+    // MARK: - Section 2: Name der Toilette (optional)
+
+    private var toiletNameSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Name der Toilette (optional)")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            TextField("z.B. \"Hauptgebäude\" falls es mehrere Toiletten gibt", text: $toiletName, prompt: Text("z.B. \"Hauptgebäude\" falls es mehrere Toiletten gibt"))
+                .textFieldStyle(.plain)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color(uiColor: .systemBackground))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                .accessibilityLabel(Text("Name der Toilette"))
+        }
+    }
+
+    // MARK: - Section 3: Eigenschaften
+
+    private var propertiesSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Eigenschaften:")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            HStack(spacing: 8) {
+                propertyCard(
+                    iconName: "toiletIconGenderSeparated",
+                    title: "Nach Geschlecht getrennte Toiletten vorhanden",
+                    isChecked: $isGenderSeparated
+                )
+
+                propertyCard(
+                    iconName: "toiletIconChangingTable",
+                    title: "Wickelraum vorhanden",
+                    isChecked: $hasChangingTable
+                )
+
+                propertyCard(
+                    iconName: "toiletIconWheelchair",
+                    title: "Barrierefreie Toilette vorhanden",
+                    isChecked: $hasWheelchairAccess
+                )
+            }
+
+            euroKeyCard
+
+            VStack(alignment: .leading, spacing: 10) {
+                Button {
+                    isPublicAccessible.toggle()
+                } label: {
+                    HStack(spacing: 8) {
+                        checkboxView(isChecked: isPublicAccessible)
+                        Text("Öffentlich zugänglich")
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(isPublicAccessible ? "Öffentlich zugänglich: Ausgewählt" : "Öffentlich zugänglich: Nicht ausgewählt"))
+
+                Button {
+                    accessibleOutsideOpeningTimes.toggle()
+                } label: {
+                    HStack(spacing: 8) {
+                        checkboxView(isChecked: accessibleOutsideOpeningTimes)
+                        Text("Außerhalb der Öffnungszeiten zugänglich")
+                            .font(.body)
+                            .foregroundStyle(.primary)
+                    }
+                }
+                .buttonStyle(.plain)
+                .accessibilityLabel(Text(accessibleOutsideOpeningTimes ? "Außerhalb der Öffnungszeiten zugänglich: Ausgewählt" : "Außerhalb der Öffnungszeiten zugänglich: Nicht ausgewählt"))
+            }
+            .padding(.top, 4)
+        }
+    }
+
+    private func propertyCard(iconName: String, title: LocalizedStringKey, isChecked: Binding<Bool>) -> some View {
+        Button {
+            isChecked.wrappedValue.toggle()
+        } label: {
+            VStack(alignment: .leading, spacing: 8) {
+                Image(iconName)
+                    .renderingMode(.template)
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 28, height: 28)
+                    .foregroundColor(Color(red: 0.35, green: 0.35, blue: 0.45))
+
+                Text(title)
+                    .font(.system(size: 12))
+                    .foregroundStyle(.primary)
+                    .multilineTextAlignment(.leading)
+                    .lineLimit(4)
+                    .fixedSize(horizontal: false, vertical: true)
+
+                Spacer(minLength: 4)
+
+                HStack {
+                    Spacer()
+                    checkboxView(isChecked: isChecked.wrappedValue, size: 18)
+                }
+            }
+            .padding(10)
+            .frame(maxWidth: .infinity, minHeight: 130, alignment: .topLeading)
+            .background(Color(uiColor: .systemBackground))
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(isChecked.wrappedValue ? Color.purple : Color(.systemGray4), lineWidth: isChecked.wrappedValue ? 1.5 : 1)
+            )
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
+        .accessibilityElement(children: .combine)
+        .accessibilityLabel(Text(title))
+        .accessibilityHint(Text("Doppeltippen, um diese Eigenschaft umzuschalten."))
+        .accessibilityAddTraits(.isButton)
+    }
+
+    private var euroKeyCard: some View {
+        HStack(spacing: 12) {
+            Button {
+                if hasWheelchairAccess {
+                    hasEuroKey.toggle()
+                }
+            } label: {
+                HStack(spacing: 12) {
+                    Image(systemName: "key.fill")
+                        .font(.body)
+                        .foregroundColor(hasWheelchairAccess ? Color(red: 0.35, green: 0.35, blue: 0.45) : Color(.systemGray3))
+
+                    Text("Kann mit Euroschlüssel geöffnet werden")
+                        .font(.system(size: 13))
+                        .foregroundColor(hasWheelchairAccess ? .primary : Color(.systemGray2))
+                        .multilineTextAlignment(.leading)
+                }
+            }
+            .buttonStyle(.plain)
+            .disabled(!hasWheelchairAccess)
+
+            Button {
+                showingEuroKeyInfo = true
+            } label: {
+                Image(systemName: "info.circle")
+                    .font(.subheadline)
+                    .foregroundColor(hasWheelchairAccess ? .purple : Color(.systemGray3))
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text("Informationen zum Euroschlüssel"))
+
+            Spacer()
+
+            Button {
+                if hasWheelchairAccess {
+                    hasEuroKey.toggle()
+                }
+            } label: {
+                if hasWheelchairAccess {
+                    checkboxView(isChecked: hasEuroKey, size: 18)
+                } else {
+                    RoundedRectangle(cornerRadius: 4)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                        .frame(width: 18, height: 18)
+                        .foregroundColor(Color(.systemGray5))
+                }
+            }
+            .buttonStyle(.plain)
+            .disabled(!hasWheelchairAccess)
+        }
+        .padding(.horizontal, 12)
+        .padding(.vertical, 12)
+        .background(Color(uiColor: .systemBackground))
+        .overlay(
+            RoundedRectangle(cornerRadius: 8)
+                .stroke(
+                    hasWheelchairAccess && hasEuroKey
+                        ? Color.purple
+                        : (hasWheelchairAccess ? Color(.systemGray4) : Color(.systemGray5)),
+                    lineWidth: hasWheelchairAccess && hasEuroKey ? 1.5 : 1
+                )
+        )
+        .clipShape(RoundedRectangle(cornerRadius: 8))
+        .accessibilityElement(children: .contain)
+        .accessibilityLabel(Text(hasWheelchairAccess ? (hasEuroKey ? "Euroschlüssel: Ausgewählt" : "Euroschlüssel: Nicht ausgewählt") : "Euroschlüssel: Deaktiviert, erfordert barrierefreie Toilette"))
+    }
+
+    // MARK: - Storage Space Section
+
+    private var storageSpaceSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Ablagefläche")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            HStack(spacing: 12) {
+                storageRadioButton(title: "Keine", value: "none")
+                storageRadioButton(title: "Wenig", value: "little")
+                storageRadioButton(title: "Viel", value: "much")
+            }
+        }
+    }
+
+    private func storageRadioButton(title: LocalizedStringKey, value: String) -> some View {
+        Button {
+            storageSpace = value
+        } label: {
+            HStack(spacing: 6) {
+                Image(systemName: storageSpace == value ? "largecircle.fill.circle" : "circle")
+                    .foregroundColor(storageSpace == value ? .purple : Color(.systemGray3))
+                    .font(.body)
+                Text(title)
+                    .font(.body)
+                    .foregroundColor(.primary)
+            }
+            .padding(.vertical, 6)
+            .padding(.horizontal, 10)
+            .background(storageSpace == value ? Color.purple.opacity(0.1) : Color(uiColor: .secondarySystemBackground))
+            .clipShape(RoundedRectangle(cornerRadius: 8))
+        }
+        .buttonStyle(.plain)
+        .accessibilityLabel(Text(title))
+    }
+
+    // MARK: - Section: Öffnungszeiten
+
+    private var openingTimesSection: some View {
+        VStack(alignment: .leading, spacing: 10) {
+            Button {
+                withAnimation(.easeInOut(duration: 0.25)) {
+                    hasOpeningTimes.toggle()
+                    if !hasOpeningTimes {
+                        placeOpeningHours = nil
+                    }
+                }
+            } label: {
+                HStack(spacing: 8) {
+                    checkboxView(isChecked: hasOpeningTimes)
+                    Text("Öffnungszeiten angeben")
+                        .font(.subheadline.bold())
+                        .foregroundStyle(.primary)
+                }
+            }
+            .buttonStyle(.plain)
+            .accessibilityLabel(Text(hasOpeningTimes ? "Öffnungszeiten angeben: Ausgewählt" : "Öffnungszeiten angeben: Nicht ausgewählt"))
+            .accessibilityHint(Text("Umschalten, um Öffnungszeiten für diese Toilette anzugeben oder zu bearbeiten."))
+
+            if hasOpeningTimes {
+                OpeningTimesInput(periods: $placeOpeningHours)
+                    .padding(.top, 4)
+            }
+        }
+    }
+
+    // MARK: - Location Picker Section
+
+    private var locationPickerSection: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            Text("Standort auf der Karte")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            let centerCoord = placeCoordinates ?? location?.coordinate ?? CLLocationCoordinate2D(latitude: 50.8957, longitude: 7.3556)
+
+            LocationPickerMapView(
+                initialCoordinate: centerCoord,
+                selectedCoordinate: $placeCoordinates
+            ) { confirmedCoord in
+                placeCoordinates = confirmedCoord
+            }
+            .frame(height: 220)
+            .clipShape(RoundedRectangle(cornerRadius: 12))
+        }
+    }
+
+    // MARK: - Section 4: Webseite
+
+    private var websiteSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Webseite")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            TextField("http://www.beispiel.de", text: $website, prompt: Text("http://www.beispiel.de"))
+                .textFieldStyle(.plain)
+                .keyboardType(.URL)
+                .textInputAutocapitalization(.never)
+                .autocorrectionDisabled()
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color(uiColor: .systemBackground))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                .accessibilityLabel(Text("Webseite"))
+        }
+    }
+
+    // MARK: - Section 5: Adresse
+
+    private var addressSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Adresse")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            TextField("Adresse eingeben", text: $address, prompt: Text("Adresse eingeben"), axis: .vertical)
+                .lineLimit(2...4)
+                .textFieldStyle(.plain)
+                .padding(.horizontal, 12)
+                .padding(.vertical, 10)
+                .background(Color(uiColor: .systemBackground))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 6)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                .accessibilityLabel(Text("Adresse"))
+        }
+    }
+
+    // MARK: - Comment Section
+
+    private var commentSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("Bemerkung")
+                .font(.subheadline.bold())
+                .foregroundStyle(.primary)
+
+            TextEditor(text: $comment)
+                .frame(minHeight: 80)
+                .padding(6)
+                .background(Color(uiColor: .systemBackground))
+                .clipShape(RoundedRectangle(cornerRadius: 8))
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color(.systemGray4), lineWidth: 1)
+                )
+                .accessibilityLabel(Text("Bemerkung"))
+        }
+    }
+
+    // MARK: - Section 6: Submit Button
+
+    private var submitButton: some View {
+        Button(action: submitToilet) {
+            HStack(spacing: 8) {
+                if isSubmitting {
+                    ProgressView()
+                        .tint(.white)
+                    Text("Wird gespeichert...")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                } else if toilet != nil {
+                    Text("Änderungen speichern")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                } else {
+                    Text("Toilette hinzufügen")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                }
+            }
+            .frame(maxWidth: .infinity)
+            .frame(height: 50)
+            .background(isSubmitting ? Color.purple.opacity(0.6) : Color.purple)
+            .clipShape(RoundedRectangle(cornerRadius: 10))
+        }
+        .disabled(isSubmitting)
+        .padding(.top, 8)
+        .accessibilityLabel(toilet != nil ? Text("Änderungen speichern") : Text("Toilette hinzufügen"))
+        .accessibilityHint(Text("Speichert die Angaben im System."))
+    }
+
+    // MARK: - Checkbox Helper View
+
+    private func checkboxView(isChecked: Bool, size: CGFloat = 20) -> some View {
+        ZStack {
+            RoundedRectangle(cornerRadius: 5)
+                .fill(isChecked ? Color.purple : Color.clear)
+                .frame(width: size, height: size)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 5)
+                        .stroke(isChecked ? Color.purple : Color(.systemGray3), lineWidth: 1.5)
+                )
+
+            if isChecked {
+                Image(systemName: "checkmark")
+                    .font(.system(size: size * 0.55, weight: .bold))
+                    .foregroundColor(.white)
+            }
+        }
+    }
+
+    // MARK: - Logic & Actions
+
+    private func loadInitialData() async {
+        if let toilet = toilet {
+            toiletName = toilet.name
+            isGenderSeparated = toilet.isGenderSeparated
+            hasChangingTable = toilet.hasChangingTable
+            hasWheelchairAccess = toilet.hasWheelchairAccess
+            hasEuroKey = (toilet.euroKey == "yes" || toilet.euroKey == "true" || toilet.euroKey == "1")
+            isPublicAccessible = toilet.isPublicAccessible
+            accessibleOutsideOpeningTimes = toilet.accessibleOutsideOpeningTimes
+            storageSpace = toilet.storageSpace ?? "none"
+            comment = toilet.comment ?? ""
+            website = toilet.website ?? ""
+            address = toilet.address ?? (location?.name ?? "")
+            placeCoordinates = toilet.coordinate
+            placeOpeningHours = toilet.placeOpeningHours
+            hasOpeningTimes = (toilet.placeOpeningHours != nil && !toilet.placeOpeningHours!.isEmpty)
+            belongsToPlace = (toilet.placeId != nil || !toilet.owner.isEmpty)
+            if let placeId = toilet.placeId {
+                selectedPlace = NearbyPlaceOption(id: placeId, name: toilet.owner, secondaryText: nil)
+            }
+        } else if let location = location {
+            if address.isEmpty {
+                address = location.name
+            }
+            placeCoordinates = location.coordinate
+        }
+
+        let coord = placeCoordinates ?? location?.coordinate
+        guard let coordinate = coord else { return }
+
+        isLoadingPlaces = true
+        placesError = nil
+        defer { isLoadingPlaces = false }
+
+        do {
+            let places = try await placesService.fetchNearbyPlaces(
+                coordinate: coordinate,
+                radius: 40.0
+            )
+            nearbyPlaces = places
+            if selectedPlace == nil, let first = places.first {
+                selectPlace(first)
+            }
+        } catch {
+            let message = "Orte in der Nähe konnten nicht geladen werden: \(error.localizedDescription)"
+            placesError = message
+            ErrorManager.shared.report(
+                error,
+                context: [
+                    "action": "fetchNearbyPlaces",
+                    "lat": coordinate.latitude,
+                    "lon": coordinate.longitude
+                ],
+                showToUser: false // shown inline in the sheet instead
+            )
+        }
+    }
+
+    private func selectPlace(_ place: NearbyPlaceOption) {
+        selectedPlace = place
+        Task {
+            do {
+                let details = try await placesService.fetchPlaceDetails(for: place.id)
+                if let formatted = details.formattedAddress, !formatted.isEmpty {
+                    address = formatted
+                }
+                if let site = details.website, !site.isEmpty {
+                    website = site
+                }
+                if let hours = details.openingHours, !hours.isEmpty {
+                    if placeOpeningHours == nil || placeOpeningHours!.isEmpty {
+                        placeOpeningHours = hours
+                        hasOpeningTimes = true
+                    }
+                }
+            } catch {
+                print("[UpdateScreen] fetchPlaceDetails error: \(error)")
+            }
+        }
+    }
+
+    private func submitToilet() {
+        validationError = nil
+
+        let finalLat = placeCoordinates?.latitude ?? location?.coordinate.latitude
+        let finalLon = placeCoordinates?.longitude ?? location?.coordinate.longitude
+
+        guard let lat = finalLat, let lon = finalLon else {
+            validationError = String(localized: "Keine Standortkoordinaten gefunden. Bitte wähle einen Ort aus.")
+            return
+        }
+
+        let trimmedName = toiletName.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedAddress = address.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedWebsite = website.trimmingCharacters(in: .whitespacesAndNewlines)
+        let trimmedComment = comment.trimmingCharacters(in: .whitespacesAndNewlines)
+
+        let ownerName = belongsToPlace ? (selectedPlace?.name) : nil
+        let placeID = belongsToPlace ? (selectedPlace?.id) : nil
+
+        if let toilet = toilet {
+            let updatePayload = UpdateToiletPayload(
+                name: trimmedName.isEmpty ? nil : trimmedName,
+                owner: ownerName,
+                lat: lat,
+                lon: lon,
+                placeId: placeID,
+                isQualified: nil,
+                isUnisex: !isGenderSeparated,
+                isGenderSeparated: isGenderSeparated,
+                hasWheelchairAccess: hasWheelchairAccess,
+                hasChangingTable: hasChangingTable,
+                accessibleOutsideOpeningTimes: accessibleOutsideOpeningTimes,
+                publicAccessible: isPublicAccessible,
+                placeOpeningHours: hasOpeningTimes ? placeOpeningHours : nil,
+                address: trimmedAddress.isEmpty ? nil : trimmedAddress,
+                website: trimmedWebsite.isEmpty ? nil : trimmedWebsite,
+                comment: trimmedComment.isEmpty ? nil : trimmedComment,
+                euroKey: (hasWheelchairAccess && hasEuroKey) ? "yes" : "no",
+                storageSpace: storageSpace,
+                status: "active"
+            )
+
+            isSubmitting = true
+            Analytics.shared.trackEvent(category: "toilet", action: "update_submit", name: ownerName ?? trimmedName)
+
+            Task {
+                do {
+                    let response = try await WCInfoAPIService.shared.updateToilet(id: toilet.id, payload: updatePayload)
+                    isSubmitting = false
+                    if response.success {
+                        Analytics.shared.trackEvent(category: "toilet", action: "update_success", name: String(response.id))
+                        showingSuccessAlert = true
+                    }
+                } catch {
+                    isSubmitting = false
+                    var context: [String: Any] = [
+                        "action": "updateToilet",
+                        "toiletId": toilet.id,
+                        "lat": lat,
+                        "lon": lon
+                    ]
+                    if let apiError = error as? WCInfoAPIError {
+                        context.merge(apiError.diagnosticContext) { _, new in new }
+                        validationError = apiError.message
+                    } else {
+                        validationError = error.localizedDescription
+                    }
+                    ErrorManager.shared.report(error, context: context)
+                    Analytics.shared.trackEvent(category: "toilet", action: "update_error")
+                }
+            }
+            return
+        }
+
+        let payload = AddToiletPayload(
+            name: trimmedName.isEmpty ? nil : trimmedName,
+            owner: ownerName,
+            lat: lat,
+            lon: lon,
+            placeId: placeID,
+            isUnisex: !isGenderSeparated,
+            isGenderSeparated: isGenderSeparated,
+            hasWheelchairAccess: hasWheelchairAccess,
+            hasChangingTable: hasChangingTable,
+            accessibleOutsideOpeningTimes: accessibleOutsideOpeningTimes,
+            publicAccessible: isPublicAccessible,
+            placeOpeningHours: hasOpeningTimes ? placeOpeningHours : nil,
+            address: trimmedAddress.isEmpty ? nil : trimmedAddress,
+            website: trimmedWebsite.isEmpty ? nil : trimmedWebsite,
+            comment: trimmedComment.isEmpty ? nil : trimmedComment,
+            euroKey: (hasWheelchairAccess && hasEuroKey) ? "yes" : nil,
+            storageSpace: storageSpace,
+            status: "active"
+        )
+
+        isSubmitting = true
+        Analytics.shared.trackEvent(category: "toilet", action: "create_submit", name: ownerName ?? trimmedName)
+
+        Task {
+            do {
+                let response = try await WCInfoAPIService.shared.addToilet(payload)
+                isSubmitting = false
+                if response.success {
+                    Analytics.shared.trackEvent(category: "toilet", action: "create_success", name: String(response.id))
+                    showingSuccessAlert = true
+                }
+            } catch {
+                isSubmitting = false
+                var context: [String: Any] = [
+                    "action": "addToilet",
+                    "lat": lat,
+                    "lon": lon
+                ]
+                if let apiError = error as? WCInfoAPIError {
+                    context.merge(apiError.diagnosticContext) { _, new in new }
+                    validationError = apiError.message
+                } else {
+                    validationError = error.localizedDescription
+                }
+                ErrorManager.shared.report(error, context: context)
+                Analytics.shared.trackEvent(category: "toilet", action: "create_error")
+            }
+        }
+    }
+}
+
+struct EuroKeyInfoView: View {
+    @Environment(\.dismiss) private var dismiss
+    @Environment(\.openURL) private var openURL
+
+    var body: some View {
+        NavigationStack {
+            ScrollView {
+                VStack(alignment: .leading, spacing: 16) {
+                    Text("Der Euroschlüssel ist ein 1986 vom CBF Darmstadt – Club Behinderter und ihrer Freunde in Darmstadt und Umgebung e. V. – eingeführtes, inzwischen über die Landesgrenzen hinaus genutztes Schließsystem, das es körperlich beeinträchtigten Menschen ermöglicht, mit einem Einheitsschlüssel selbständig Zugang zu behindertengerechten sanitären Anlagen und Einrichtungen zu erhalten, z. B. an teilnehmenden Autobahn- und Bahnhofstoiletten, aber auch für öffentliche Toiletten in Fußgängerzonen, Museen oder Behörden.")
+                        .font(.body)
+                        .foregroundStyle(.primary)
+
+                    Text("Der Schlüssel wird ausschließlich an Menschen ausgehändigt, die auf behindertengerechte Toiletten angewiesen sind.")
+                        .font(.body)
+                        .foregroundStyle(.primary)
+
+                    VStack(alignment: .leading, spacing: 6) {
+                        Text("Der deutsche Schwerbehindertenausweis gilt als Berechtigung, wenn")
+                            .font(.body)
+                            .foregroundStyle(.primary)
+
+                        Text("• das Merkzeichen: aG, B, H, oder BL")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 8)
+
+                        Text("• oder das Merkzeichen G und der GdB ab 70 und aufwärts enthalten ist.")
+                            .font(.body)
+                            .foregroundStyle(.secondary)
+                            .padding(.leading, 8)
+                    }
+
+                    Text("Quelle: https://www.cbf-da.de/leistungen/euroschluessel")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                        .padding(.top, 4)
+
+                    if let url = URL(string: "https://www.cbf-da.de/leistungen/euroschluessel") {
+                        Button {
+                            openURL(url)
+                        } label: {
+                            HStack {
+                                Image(systemName: "safari")
+                                Text("Webseite öffnen (cbf-da.de)")
+                            }
+                            .font(.subheadline.bold())
+                            .foregroundColor(.purple)
+                        }
+                        .padding(.top, 4)
+                    }
+                }
+                .padding(20)
+            }
+            .navigationTitle("Euroschlüssel")
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbar {
+                ToolbarItem(placement: .confirmationAction) {
+                    Button("Fertig") {
+                        dismiss()
+                    }
+                    .accessibilityLabel(Text("Fertig"))
+                }
+            }
+        }
+    }
+}
