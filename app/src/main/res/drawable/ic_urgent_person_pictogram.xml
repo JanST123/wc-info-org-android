@@ -1,0 +1,60 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="100dp"
+    android:height="100dp"
+    android:viewportWidth="100"
+    android:viewportHeight="100">
+
+    <!-- Ambient Urgency Yellow Glow -->
+    <path
+        android:fillColor="#40FFD600"
+        android:pathData="M50,15 A38,38 0 1,0 50,91 A38,38 0 1,0 50,15 Z" />
+
+    <!-- Head -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M50,17 A8,8 0 1,0 50,33 A8,8 0 1,0 50,17 Z" />
+
+    <!-- Torso -->
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M44,36 H56 A3,3 0 0,1 59,39 V52 A3,3 0 0,1 56,55 H44 A3,3 0 0,1 41,52 V39 A3,3 0 0,1 44,36 Z" />
+
+    <!-- Crossed Legs -->
+    <!-- Left Leg (angled right) -->
+    <group
+        android:pivotX="46"
+        android:pivotY="54"
+        android:rotation="18">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M43.5,54 H48.5 A2.5,2.5 0 0,1 51,56.5 V75.5 A2.5,2.5 0 0,1 48.5,78 H43.5 A2.5,2.5 0 0,1 41,75.5 V56.5 A2.5,2.5 0 0,1 43.5,54 Z" />
+    </group>
+
+    <!-- Right Leg (angled left, crossing) -->
+    <group
+        android:pivotX="54"
+        android:pivotY="54"
+        android:rotation="-18">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M51.5,54 H56.5 A2.5,2.5 0 0,1 59,56.5 V75.5 A2.5,2.5 0 0,1 56.5,78 H51.5 A2.5,2.5 0 0,1 49,75.5 V56.5 A2.5,2.5 0 0,1 51.5,54 Z" />
+    </group>
+
+    <!-- Exclamation Triangle Badge (Top Right) -->
+    <group
+        android:translateX="18"
+        android:translateY="-4">
+        <!-- Triangle Body -->
+        <path
+            android:fillColor="#FFD600"
+            android:pathData="M54,12 C55,10.2 57,10.2 58,12 L71,32 C72,33.7 71,36 69,36 H43 C41,36 40,33.7 41,32 Z" />
+        <!-- Exclamation Mark Line -->
+        <path
+            android:fillColor="#800A17"
+            android:pathData="M55,18 H57 V26 H55 Z" />
+        <!-- Exclamation Mark Dot -->
+        <path
+            android:fillColor="#800A17"
+            android:pathData="M56,29 A1.3,1.3 0 1,0 56,31.6 A1.3,1.3 0 1,0 56,29 Z" />
+    </group>
+</vector>

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_purple">#9333EA</color>
+    <color name="primary_purple_dark">#7E22CE</color>
+    <color name="primary_purple_light">#F3E8FF</color>
+    <color name="accent_magenta">#D946EF</color>
+
+    <color name="status_open">#22C55E</color>
+    <color name="status_urgent">#EF4444</color>
+    <color name="status_warning">#F97316</color>
+    <color name="status_closed">#6B7280</color>
+
+    <color name="bg_app">#F9FAFB</color>
+    <color name="bg_card">#FFFFFF</color>
+    <color name="bg_secondary">#F3F4F6</color>
+    <color name="border_subtle">#E5E7EB</color>
+
+    <!-- Splash Screen Lavendula Background Colors (matching iOS LaunchScreenBackground) -->
+    <color name="splash_background_lavender">#873BAD</color>
+    <color name="splash_background_lavender_dark">#4F216B</color>
+</resources>

@@ -1,0 +1,307 @@
+<resources>
+    <string name="app_name">WC-info</string>
+    <string name="location_permission_rationale">Dein Standort wird benötigt, um Toiletten in deiner Nähe auf der Karte anzuzeigen und dorthin zu navigieren.</string>
+
+    <!-- Home -->
+    <string name="search_placeholder">Wo möchtest du suchen?</string>
+    <string name="search_button">Suchen</string>
+    <string name="nearby_button">In der Nähe</string>
+    <string name="recent_searches">Letzte Suchen</string>
+    <string name="current_location">Aktueller Standort</string>
+
+    <!-- Results & Filters -->
+    <string name="filter_all">Alle Toiletten anzeigen</string>
+    <string name="filter_summary_showing_prefix">Zeige</string>
+    <string name="filter_summary_toilets">Toiletten</string>
+    <string name="filter_desc_opened">geöffnete</string>
+    <string name="filter_desc_public">öffentlich zugängliche</string>
+    <string name="filter_desc_wheelchair">rollstuhlgerechte</string>
+    <string name="filter_desc_gender_separated">geschlechtergetrennte</string>
+    <string name="filter_desc_changing_table">mit Wickeltisch</string>
+    <string name="filter_desc_euro_key">mit Euroschlüssel</string>
+    <string name="missing_toilet_title">Fehlt eine Toilette?</string>
+    <string name="missing_toilet_subtitle">Hier klicken zum Eintragen – wir freuen uns!</string>
+    <string name="missing_toilet_banner">Fehlt eine Toilette?\nHier klicken zum Eintragen – wir freuen uns!</string>
+    <string name="filter_title">Filter</string>
+    <string name="filter_reset">Standard-Filter anwenden</string>
+    <string name="filter_show_closed">Geschlossene Toiletten anzeigen</string>
+    <string name="filter_show_non_public">Nicht-öffentliche Toiletten anzeigen</string>
+    <string name="filter_show_non_wheelchair">Nicht-barrierefreie Toiletten anzeigen</string>
+    <string name="filter_show_without_changing_table">Toiletten ohne Wickelraum anzeigen</string>
+    <string name="filter_show_without_gender_separation">Toiletten ohne Geschlechtertrennung anzeigen</string>
+    <string name="filter_show_without_euro_key">Toiletten ohne Euroschlüssel anzeigen</string>
+    <string name="navigate">Navigieren</string>
+    <string name="view_details">Details ansehen</string>
+    <string name="map_tooltip_view_details">Details ansehen ›</string>
+    <string name="map_tooltip_add_toilet_title">Neue Toilette eintragen</string>
+    <string name="map_tooltip_add_toilet_subtitle">Standort: %1$.5f, %2$.5f</string>
+    <string name="map_tooltip_add_toilet_action">Hier Toilette anlegen ›</string>
+    <string name="qualified_badge_tooltip">Von Gästen oder Betreiber verifiziert</string>
+    <string name="filter_non_public_hint">Nicht-öffentliche Toiletten sind oft nur für Gäste oder Kunden zugänglich.</string>
+    <string name="no_toilets_found">Keine Toiletten gefunden</string>
+    <string name="searching_toilets">Suche Toiletten…</string>
+
+    <!-- Navigation Choice Sheet -->
+    <string name="start_navigation_title">Navigation starten</string>
+    <string name="start_navigation_desc">Wähle zwischen der internen Kompass-Navigation und einer externen Karten-App.</string>
+    <string name="internal_compass_nav">Interne Kompass-Navigation</string>
+    <string name="external_maps_nav">Google Maps / Externe Karten-App</string>
+
+    <!-- Details -->
+    <string name="details_title">Details</string>
+    <string name="close">Schließen</string>
+    <string name="open_now">Jetzt geöffnet</string>
+    <string name="closed">Geschlossen</string>
+    <string name="open_24_hours">24 Stunden geöffnet</string>
+    <string name="closes_in">schließt in %1$s</string>
+    <string name="opens_at">öffnet um %1$s</string>
+    <string name="open_status_temporarily_closed">Vorübergehend geschlossen</string>
+    <string name="open_status_open_24h">24 Stunden geöffnet</string>
+    <string name="open_status_open">Geöffnet</string>
+    <string name="open_status_open_now">Jetzt geöffnet</string>
+    <string name="open_status_closed">Geschlossen</string>
+    <string name="open_status_closes_in">schließt in %1$s</string>
+    <string name="open_status_opens_in">öffnet in %1$s</string>
+    <string name="open_status_accessible_outside">Außerhalb der Öffnungszeiten zugänglich</string>
+    <string name="open_status_no_times">Keine Öffnungszeiten</string>
+    <string name="open_status_check_times">Zeiten prüfen</string>
+    <string name="time_hours_minutes">%1$d Std. %2$d Min.</string>
+    <string name="time_hours">%1$d Std.</string>
+    <string name="time_minutes">%1$d Min.</string>
+    <string name="wheelchair_yes">Rollstuhlgerechte Toilette vorhanden</string>
+    <string name="wheelchair_no">Keine rollstuhlgerechte Toilette</string>
+    <string name="euro_key_yes">Mit Euroschlüssel nutzbar</string>
+    <string name="euro_key_no">Euroschlüssel nicht erforderlich</string>
+    <string name="changing_table_yes">Wickeltisch vorhanden</string>
+    <string name="gender_separated_yes">Getrennte Geschlechtertoiletten vorhanden</string>
+    <string name="unisex_yes">Unisex-Toilette vorhanden</string>
+    <string name="public_accessible_yes">Öffentlich zugänglich</string>
+    <string name="public_accessible_no">Nicht öffentlich zugänglich (nur für Kunden/Gäste)</string>
+    <string name="accessible_outside_hours">Auch außerhalb der Öffnungszeiten zugänglich</string>
+    <string name="operator">Betreiber</string>
+    <string name="operator_label">Betreiber: %1$s</string>
+    <string name="address">Adresse</string>
+    <string name="website">Webseite</string>
+    <string name="notes">Hinweise / Wegbeschreibung</string>
+    <string name="photos">Fotos</string>
+    <string name="add_photo">Foto hinzufügen</string>
+    <string name="add_photo_button">+ Foto</string>
+    <string name="opening_hours">Öffnungszeiten</string>
+    <string name="suggest_changes">Änderungen vorschlagen</string>
+    <string name="report_problem">Problem melden</string>
+    <string name="edit_button">Bearbeiten</string>
+    <string name="report_button">Melden</string>
+    <string name="storage_space_label">Ablagefläche</string>
+    <string name="storage_none">Keine</string>
+    <string name="storage_little">Wenig</string>
+    <string name="storage_much">Viel</string>
+    <string name="euro_key_dialog_title">Euroschlüssel</string>
+    <string name="euro_key_dialog_text">Der Euroschlüssel ist ein europaweit einheitliches Schließsystem für barrierefreie Toiletten. Er ermöglicht Menschen mit Behinderungen den selbstständigen Zugang zu behindertengerechten Sanitäranlagen.</string>
+    <string name="euro_key_info_p1">Der Euroschlüssel ist ein 1986 vom CBF Darmstadt – Club Behinderter und ihrer Freunde in Darmstadt und Umgebung e. V. – eingeführtes, inzwischen über die Landesgrenzen hinaus genutztes Schließsystem, das es körperlich beeinträchtigten Menschen ermöglicht, mit einem Einheitsschlüssel selbstständig Zugang zu behindertengerechten sanitären Anlagen und Einrichtungen zu erhalten, z. B. an teilnehmenden Autobahn- und Bahnhofstoiletten, aber auch für öffentliche Toiletten in Fußgängerzonen, Museen oder Behörden.</string>
+    <string name="euro_key_info_p2">Der Schlüssel wird ausschließlich an Menschen ausgehändigt, die auf behindertengerechte Toiletten angewiesen sind.</string>
+    <string name="euro_key_info_p3">Der deutsche Schwerbehindertenausweis gilt als Berechtigung, wenn\n• das Merkzeichen: aG, B, H, oder BL\n• oder das Merkzeichen G und der GdB ab 70 und aufwärts enthalten ist.</string>
+    <string name="euro_key_info_source">Quelle: %1$s</string>
+    <string name="euro_key_info_open_website">Webseite öffnen (cbf-da.de)</string>
+    <string name="euro_key_website_url">https://www.cbf-da.de/leistungen/euroschluessel</string>
+    <string name="understood">Verstanden</string>
+    <string name="share_toilet_text">Schau dir diese Toilette auf WC-info an: %1$s - %2$s</string>
+    <string name="share_toilet_title">Toilette teilen</string>
+    <string name="error_load_toilet">Toilette konnte nicht geladen werden.</string>
+
+    <!-- Feedback -->
+    <string name="feedback_header_title">Feedback geben</string>
+    <string name="feedback_default_subject">Problem mit Toilette #%1$d</string>
+    <string name="feedback_title">Was stimmt mit diesem Eintrag nicht?</string>
+    <string name="feedback_desc">Beschreibe das Problem (z.B. falsche Öffnungszeiten, Toilette existiert nicht mehr, defekt). Dein Feedback hilft der Community!</string>
+    <string name="feedback_subject_header">Betreff</string>
+    <string name="feedback_message_header">Nachricht</string>
+    <string name="optional_parentheses">(optional)</string>
+    <string name="feedback_subject_placeholder">Betreff eingeben oder auswählen…</string>
+    <string name="feedback_message_placeholder">Beschreibe das Problem oder die gewünschten Änderungen…</string>
+    <string name="feedback_subject_not_exist">Toilette existiert nicht</string>
+    <string name="feedback_subject_check">Toilette überprüfen</string>
+    <string name="feedback_subject_relocated">Toilette wurde verlegt</string>
+    <string name="feedback_subject_belongs_elsewhere">Toilette gehört woanders hin</string>
+    <string name="feedback_submit_button">Feedback senden</string>
+    <string name="feedback_sent_success">Wir haben dein Feedback erhalten und schauen es uns zeitnah an</string>
+    <string name="error_sending_feedback">Fehler beim Senden</string>
+
+    <!-- Update Toilet -->
+    <string name="toilet_belongs_to_place">Toilette gehört zum Ort</string>
+    <string name="toilet_name_optional">Name der Toilette (optional)</string>
+    <string name="features_header">Eigenschaften:</string>
+    <string name="gender_separated_title">Nach Geschlecht getrennte Toiletten vorhanden</string>
+    <string name="changing_table_title">Wickelraum vorhanden</string>
+    <string name="wheelchair_access_title">Barrierefreie Toilette vorhanden</string>
+    <string name="euro_key_title">Kann mit Euroschlüssel geöffnet werden</string>
+    <string name="provide_opening_hours">Öffnungszeiten angeben</string>
+    <string name="location_on_map_header">Standort auf der Karte</string>
+    <string name="selected_position">Ausgewählte Position</string>
+    <string name="choose_this_position">Diese Position wählen</string>
+    <string name="notes_header">Bemerkung</string>
+    <string name="website_header">Webseite</string>
+    <string name="address_header">Adresse</string>
+    <string name="select_place">Ort auswählen</string>
+    <string name="no_place">Kein Ort (eigenständig)</string>
+    <string name="toilet_name_label">Bezeichnung der Toilette</string>
+    <string name="toilet_owner_label">Betreiber / Einrichtung</string>
+    <string name="wheelchair_accessible_label">Rollstuhlgerecht / barrierefrei</string>
+    <string name="save_changes_button">Änderungen speichern</string>
+    <string name="error_loading">Fehler beim Laden</string>
+    <string name="error_saving">Fehler beim Speichern</string>
+
+    <!-- Compass -->
+    <string name="compass_title">Kompass-Navigation</string>
+    <string name="straight_ahead">Geradeaus</string>
+    <string name="slight_right">Halb rechts</string>
+    <string name="right">Rechts</string>
+    <string name="sharp_right">Scharf rechts</string>
+    <string name="behind_you">Hinter dir</string>
+    <string name="sharp_left">Scharf links</string>
+    <string name="left">Links</string>
+    <string name="slight_left">Halb links</string>
+    <string name="arrived">Du hast das Ziel erreicht!</string>
+    <string name="open_in_maps">In externer Karten-App öffnen</string>
+
+    <!-- Wizard -->
+    <string name="add_toilet_title">Toilette anlegen</string>
+    <string name="next">Weiter</string>
+    <string name="back">Zurück</string>
+    <string name="done">Fertig</string>
+    <string name="cancel_button">Abbrechen</string>
+    <string name="toilet_saved">Toilette gespeichert</string>
+    <string name="thank_you">Herzlichen Dank!</string>
+    <string name="saved_confirmation">Deine Informationen wurden gespeichert.</string>
+    <string name="wizard_company_banner">Firma oder Kommune? – Bitte hier entlang</string>
+    <string name="wizard_company_dialog_title">Firma oder Kommune?</string>
+    <string name="wizard_company_dialog_message">Möchtest du als Unternehmen, Kommune oder Betreiber mehrerer Toiletten eine größere Anzahl an Toiletten hinzufügen?\n\nKontaktiere uns gerne per E-Mail an hi@wc-info.org und sende uns deine Toilettendaten in einem beliebigen Format (z. B. als CSV, Excel- oder Textliste). Wir importieren diese Toiletten sehr gerne für dich!</string>
+    <string name="wizard_company_dialog_email">E-Mail senden</string>
+    <string name="wizard_step_indicator">Frage %1$d von %2$d</string>
+    <string name="wizard_toilet_saved_badge">✓ Toilette gespeichert</string>
+    <string name="wizard_saving">Toilette wird gespeichert...</string>
+    <string name="wizard_save_toilet">Toilette speichern</string>
+    <string name="wizard_add_toilet_by_photo">Toilette per Foto anlegen</string>
+
+    <string name="wizard_q1_title">Gehört die Toilette zu einem dieser Orte?</string>
+    <string name="wizard_q1_subtitle">Wähle den Ort aus, zu dem die Toilette gehört:</string>
+    <string name="wizard_q1_loading">Orte in der Nähe werden gesucht...</string>
+    <string name="wizard_q1_none_of_these">Keiner dieser Orte</string>
+
+    <string name="wizard_q2_title">Wo befindet sich die Toilette?</string>
+    <string name="wizard_q2_subtitle">Gib eine kurze Ortsangabe oder Bezeichnung an:</string>
+    <string name="wizard_q2_placeholder">z.B. 1. Stock bei den Umkleiden</string>
+
+    <string name="wizard_q3_title">Befindest du dich gerade unter freiem Himmel und vor dem Eingang der Toilette?</string>
+    <string name="wizard_q3_subtitle">Dann können wir deine aktuelle Position zur Toilette hinzufügen, um anderen die Navigation zu erleichtern.</string>
+    <string name="wizard_q3_yes">Ja, benutzt meine Position</string>
+    <string name="wizard_q3_no">Nein</string>
+
+    <string name="wizard_q4_title">Bitte wähle den Punkt auf der Karte, an dem sich die Toilette befindet</string>
+    <string name="wizard_q4_subtitle">Tippe auf die Karte oder verschiebe die Markierung:</string>
+    <string name="wizard_q4_choose_location">Diesen Standort wählen</string>
+
+    <string name="wizard_q5_title">Ist die Toilette nach Geschlecht getrennt?</string>
+    <string name="wizard_q5_yes">Ja</string>
+    <string name="wizard_q5_no_unisex">Nein, Unisex</string>
+
+    <string name="wizard_q6_title">Ist eine barrierefreie Toilette vorhanden?</string>
+    <string name="wizard_q6_yes">Ja</string>
+    <string name="wizard_q6_no">Nein</string>
+
+    <string name="wizard_q7_title">Kann die Türe mit Euro-Schlüssel geöffnet werden?</string>
+    <string name="wizard_q7_subtitle">Diese Information ist oft in der Nähe des Schlosses zu lesen.</string>
+    <string name="wizard_q7_yes">Ja</string>
+    <string name="wizard_q7_unknown">Nicht sicher</string>
+    <string name="wizard_q7_no">Nein</string>
+
+    <string name="wizard_q8_title">Möchtest du eine Adresse angeben?</string>
+    <string name="wizard_q8_placeholder">Adresse eingeben</string>
+    <string name="wizard_q8_save">Adresse speichern</string>
+    <string name="wizard_q8_skip">Nein, weiter</string>
+
+    <string name="wizard_q9_title">Möchtest du Öffnungszeiten angeben?</string>
+    <string name="wizard_q9_subtitle">Du kannst auch im nächsten Schritt ein Foto der Öffnungszeiten hochladen, dann machen wir das für dich.</string>
+    <string name="wizard_q9_yes">Ja, Öffnungszeiten eingeben</string>
+    <string name="wizard_q9_no">Nein, keine Öffnungszeiten</string>
+    <string name="wizard_q9_edit_title">Öffnungszeiten festlegen</string>
+    <string name="wizard_q9_edit_subtitle">Wähle die Wochentage und trage die Öffnungs- und Schließzeiten ein:</string>
+    <string name="wizard_q9_save">Öffnungszeiten speichern</string>
+    <string name="wizard_q9_add_period">Weiteren Zeitraum hinzufügen</string>
+    <string name="wizard_q9_period_n">Zeitraum %1$d</string>
+    <string name="wizard_q9_open_24h">24 Stunden geöffnet</string>
+    <string name="wizard_q9_opens_at">Öffnet um</string>
+    <string name="wizard_q9_closes_at">Schließt um</string>
+    <string name="wizard_q9_preset_mo_fr">Mo–Fr</string>
+    <string name="wizard_q9_preset_sa_so">Sa–So</string>
+    <string name="wizard_q9_preset_daily">Täglich</string>
+
+    <string name="wizard_q10_title">Ist der Zugang öffentlich möglich?</string>
+    <string name="wizard_q10_subtitle">Gib an, ob man diese Toilette auch nutzen kann, ohne eine Eintrittskarte zu haben, Mitglied zu sein oder etwas zu kaufen etc.</string>
+    <string name="wizard_q10_yes">Ja, öffentlicher Zugang möglich</string>
+    <string name="wizard_q10_no">Nein, nicht ohne weiteres möglich</string>
+
+    <string name="wizard_q11_title">Ist der Zugang auch ausserhalb der Öffnungszeiten möglich?</string>
+    <string name="wizard_q11_subtitle">z.B. wenn die Toilette von aussen oder per Euro-Schlüssel zugänglich ist</string>
+    <string name="wizard_q11_yes">Ja, auf jeden Fall möglich</string>
+    <string name="wizard_q11_no">Nein oder nicht sicher</string>
+
+    <string name="wizard_q12_title">Gibt es Ablageflächen, Kleiderhaken usw.?</string>
+    <string name="wizard_q12_none">Keine</string>
+    <string name="wizard_q12_little">Wenig</string>
+    <string name="wizard_q12_much">Viel</string>
+    <string name="wizard_q12_no_info">Keine Angabe</string>
+
+    <string name="wizard_q13_title">Möchtest du Fotos hinzufügen?</string>
+    <string name="wizard_q13_select_photos">Fotos auswählen</string>
+    <string name="wizard_q13_select_photos_subtitle">Tippe hier, um Fotos hinzuzufügen</string>
+    <string name="wizard_q13_uploading">Upload...</string>
+    <string name="wizard_q13_uploaded">Fertig</string>
+    <string name="wizard_q13_retry">Wdh.</string>
+
+    <string name="wizard_q14_title">Möchtest du sonst noch etwas zu dieser Toilette schreiben?</string>
+    <string name="wizard_q14_placeholder">Kommentar oder Hinweise eingeben...</string>
+    <string name="wizard_q14_save">Toilette speichern</string>
+
+    <string name="wizard_celebration_title">Vielen Dank!</string>
+    <string name="wizard_celebration_subtitle">Deine Angaben wurden gespeichert.</string>
+    <string name="wizard_cancel_dialog_title">Eingabe abbrechen?</string>
+    <string name="wizard_cancel_dialog_message">Möchtest du das Hinzufügen der Toilette wirklich abbrechen? Die bisherigen Eingaben gehen verloren.</string>
+    <string name="wizard_cancel_dialog_confirm">Verwerfen &amp; Beenden</string>
+    <string name="wizard_cancel_dialog_dismiss">Weiter ausfüllen</string>
+
+    <!-- Widget Strings -->
+    <string name="widget_name">Notfall-Toilette</string>
+    <string name="widget_description">Finde und navigiere mit nur einem Fingertipp direkt per Kompass zur nächsten passenden Toilette.</string>
+    <string name="widget_notfall">NOTFALL</string>
+    <string name="widget_wc">WC</string>
+    <string name="widget_title">Nächste Toilette</string>
+    <string name="widget_subtitle_compass">1-Tap Kompass</string>
+    <string name="widget_wc_notfall">WC NOTFALL</string>
+    <string name="widget_instant_nav">SOFORT-NAVIGATION</string>
+    <string name="widget_tap_to_navigate">Tippen zum Navigieren</string>
+    <string name="widget_all_available_toilets">Alle verfügbaren Toiletten</string>
+    <string name="widget_tag_open">Geöffnet</string>
+    <string name="widget_tag_only_public">Nur Öffentlich</string>
+    <string name="widget_tag_public_fallback">Öffentlich (>%1$dm Ausweich)</string>
+    <string name="widget_tag_wheelchair">Rollstuhlgerecht</string>
+    <string name="widget_tag_changing_table">Wickeltisch</string>
+    <string name="widget_tag_separated">Getrennt</string>
+    <string name="widget_tag_euro_key">Euroschlüssel</string>
+    <string name="widget_config_title">Notfall-Filter</string>
+    <string name="widget_config_desc">Passe an, welche Kriterien bei der schnellen Notfall-Navigation berücksichtigt werden sollen.</string>
+    <string name="widget_config_save">Widget speichern</string>
+    <string name="widget_config_preview">Vorschau</string>
+    <string name="widget_config_size_small">Klein (2x2)</string>
+    <string name="widget_config_size_medium">Mittel (4x2)</string>
+    <string name="widget_config_fallback_desc">Navigiert zu einer näheren geöffneten nicht-öffentlichen Toilette, falls die nächste öffentliche weiter entfernt ist.</string>
+    <string name="widget_config_max_dist_title">Max. Distanz zur öffentlichen Toilette: %1$d m</string>
+
+    <!-- Photo Lightbox & Deletion -->
+    <string name="delete_photo">Foto entfernen</string>
+    <string name="delete_photo_title">Foto löschen?</string>
+    <string name="delete_photo_confirmation_message">Ist dies ein unpassendes Foto oder hast du persönliche Gründe dieses Foto zu löschen? Wählst du \'Löschen\' wird das Foto sofort gelöscht und das Foto im Nachgang durch uns geprüft. Wir behalten uns vor das Foto nachträglich wiederherzustellen sollte es doch passend sein und unserer Meinung kein Persönlichkeitsrecht verletzen.</string>
+    <string name="delete">Löschen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="photo_deleted_success">Foto erfolgreich gelöscht</string>
+    <string name="no_photos_available">Keine Fotos vorhanden</string>
+</resources>

@@ -1,0 +1,26 @@
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="36dp"
+    android:height="44dp"
+    android:viewportWidth="640"
+    android:viewportHeight="785">
+
+    <!-- Pin Marker Background (Primary Purple) with white border -->
+    <path
+        android:fillColor="#9333EA"
+        android:strokeColor="#FFFFFF"
+        android:strokeWidth="20"
+        android:strokeLineJoin="round"
+        android:pathData="M 320,18 C 160,18 30,148 30,308 C 30,478 290,738 310,760 C 315,766 325,766 330,760 C 350,738 610,478 610,308 C 610,148 480,18 320,18 Z" />
+
+    <!-- FontAwesome Toilet Paper Icon (White) -->
+    <group
+        android:pivotX="320"
+        android:pivotY="352"
+        android:scaleX="0.52"
+        android:scaleY="0.52"
+        android:translateY="-48">
+        <path
+            android:fillColor="#FFFFFF"
+            android:pathData="M391.1 96C382.3 107.1 375.1 119.1 369.2 130.8C347.8 173.5 336 229.2 336 288L336 552C336 582.9 310.9 608 280 608L120 608C89.1 608 64 582.9 64 552L64 288C64 182 107 96 160 96L391.1 96zM480 480C427 480 384 394 384 288C384 182 427 96 480 96C533 96 576 182 576 288C576 394 533 480 480 480zM480 352C497.7 352 512 323.3 512 288C512 252.7 497.7 224 480 224C462.3 224 448 252.7 448 288C448 323.3 462.3 352 480 352z" />
+    </group>
+</vector>

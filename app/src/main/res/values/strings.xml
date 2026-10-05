@@ -1,0 +1,307 @@
+<resources>
+    <string name="app_name">WC-info</string>
+    <string name="location_permission_rationale">Your location is required to display nearby toilets on the map and provide navigation.</string>
+
+    <!-- Home -->
+    <string name="search_placeholder">Where do you want to search?</string>
+    <string name="search_button">Search</string>
+    <string name="nearby_button">Nearby</string>
+    <string name="recent_searches">Recent searches</string>
+    <string name="current_location">Current Location</string>
+
+    <!-- Results & Filters -->
+    <string name="filter_all">Show all toilets</string>
+    <string name="filter_summary_showing_prefix">Showing</string>
+    <string name="filter_summary_toilets">toilets</string>
+    <string name="filter_desc_opened">opened</string>
+    <string name="filter_desc_public">public accessible</string>
+    <string name="filter_desc_wheelchair">wheelchair accessible</string>
+    <string name="filter_desc_gender_separated">gender-separated</string>
+    <string name="filter_desc_changing_table">with changing table</string>
+    <string name="filter_desc_euro_key">with Euro-key</string>
+    <string name="missing_toilet_title">Missing a toilet?</string>
+    <string name="missing_toilet_subtitle">Click here to add a toilet – we appreciate it!</string>
+    <string name="missing_toilet_banner">Missing a toilet?\nClick here to add a toilet – we appreciate it!</string>
+    <string name="filter_title">Filters</string>
+    <string name="filter_reset">Reset to default</string>
+    <string name="filter_show_closed">Show closed toilets</string>
+    <string name="filter_show_non_public">Show non-public toilets</string>
+    <string name="filter_show_non_wheelchair">Show non-wheelchair accessible toilets</string>
+    <string name="filter_show_without_changing_table">Show toilets without changing table</string>
+    <string name="filter_show_without_gender_separation">Show toilets without gender separation</string>
+    <string name="filter_show_without_euro_key">Show toilets without Euro-key</string>
+    <string name="navigate">Navigate</string>
+    <string name="view_details">View details</string>
+    <string name="map_tooltip_view_details">View details ›</string>
+    <string name="map_tooltip_add_toilet_title">Add new toilet</string>
+    <string name="map_tooltip_add_toilet_subtitle">Location: %1$.5f, %2$.5f</string>
+    <string name="map_tooltip_add_toilet_action">Create toilet at this location ›</string>
+    <string name="qualified_badge_tooltip">Verified by guests or owner</string>
+    <string name="filter_non_public_hint">Non-public toilets are often only accessible to guests or customers.</string>
+    <string name="no_toilets_found">No toilets found</string>
+    <string name="searching_toilets">Searching toilets…</string>
+
+    <!-- Navigation Choice Sheet -->
+    <string name="start_navigation_title">Start navigation</string>
+    <string name="start_navigation_desc">Choose between internal compass navigation and an external maps app.</string>
+    <string name="internal_compass_nav">Internal Compass Navigation</string>
+    <string name="external_maps_nav">Google Maps / External Maps App</string>
+
+    <!-- Details -->
+    <string name="details_title">Details</string>
+    <string name="close">Close</string>
+    <string name="open_now">Open now</string>
+    <string name="closed">Closed</string>
+    <string name="open_24_hours">Open 24 hours</string>
+    <string name="closes_in">closes in %1$s</string>
+    <string name="opens_at">opens at %1$s</string>
+    <string name="open_status_temporarily_closed">Temporarily closed</string>
+    <string name="open_status_open_24h">Open 24 hours</string>
+    <string name="open_status_open">Open</string>
+    <string name="open_status_open_now">Open now</string>
+    <string name="open_status_closed">Closed</string>
+    <string name="open_status_closes_in">closes in %1$s</string>
+    <string name="open_status_opens_in">opens in %1$s</string>
+    <string name="open_status_accessible_outside">Accessible outside opening hours</string>
+    <string name="open_status_no_times">No opening times</string>
+    <string name="open_status_check_times">Check hours</string>
+    <string name="time_hours_minutes">%1$d h %2$d min</string>
+    <string name="time_hours">%1$d h</string>
+    <string name="time_minutes">%1$d min</string>
+    <string name="wheelchair_yes">Wheelchair accessible toilet available</string>
+    <string name="wheelchair_no">No wheelchair accessible toilet</string>
+    <string name="euro_key_yes">Can be opened with a Euro key</string>
+    <string name="euro_key_no">Euro key not required</string>
+    <string name="changing_table_yes">Baby changing facility available</string>
+    <string name="gender_separated_yes">Gender-separated toilets available</string>
+    <string name="unisex_yes">Unisex toilet available</string>
+    <string name="public_accessible_yes">Publicly accessible</string>
+    <string name="public_accessible_no">Not publicly accessible (customer-only)</string>
+    <string name="accessible_outside_hours">Accessible outside opening times</string>
+    <string name="operator">Operator</string>
+    <string name="operator_label">Operator: %1$s</string>
+    <string name="address">Address</string>
+    <string name="website">Website</string>
+    <string name="notes">Notes / Directions</string>
+    <string name="photos">Photos</string>
+    <string name="add_photo">Add photo</string>
+    <string name="add_photo_button">+ Photo</string>
+    <string name="opening_hours">Opening hours</string>
+    <string name="suggest_changes">Suggest Changes</string>
+    <string name="report_problem">Report a Problem</string>
+    <string name="edit_button">Edit</string>
+    <string name="report_button">Report</string>
+    <string name="storage_space_label">Storage space</string>
+    <string name="storage_none">None</string>
+    <string name="storage_little">Little</string>
+    <string name="storage_much">Much</string>
+    <string name="euro_key_dialog_title">Euro key</string>
+    <string name="euro_key_dialog_text">The Euro key is a standardized European locking system for accessible toilets. It allows people with disabilities independent access to accessible sanitary facilities.</string>
+    <string name="euro_key_info_p1">The Euro key is a locking system introduced in 1986 by CBF Darmstadt (Club of the Disabled and their Friends in Darmstadt and Surroundings) and now used across borders. It allows physically impaired people independent access to accessible sanitary facilities and installations using a uniform key, e.g. at participating highway service areas and train stations, as well as public toilets in pedestrian zones, museums, or authorities.</string>
+    <string name="euro_key_info_p2">The key is issued exclusively to people who rely on accessible toilets.</string>
+    <string name="euro_key_info_p3">In Germany, a severe disability pass serves as authorization if it includes:\n• category markers: aG, B, H, or BL\n• or category marker G with a degree of disability (GdB) of 70 or higher.</string>
+    <string name="euro_key_info_source">Source: %1$s</string>
+    <string name="euro_key_info_open_website">Open website (cbf-da.de)</string>
+    <string name="euro_key_website_url">https://www.cbf-da.de/leistungen/euroschluessel</string>
+    <string name="understood">Got it</string>
+    <string name="share_toilet_text">Check out this toilet on WC-info: %1$s - %2$s</string>
+    <string name="share_toilet_title">Share toilet</string>
+    <string name="error_load_toilet">Could not load toilet.</string>
+
+    <!-- Feedback -->
+    <string name="feedback_header_title">Give feedback</string>
+    <string name="feedback_default_subject">Issue with toilet #%1$d</string>
+    <string name="feedback_title">What is wrong with this listing?</string>
+    <string name="feedback_desc">Describe the problem (e.g. incorrect hours, toilet no longer exists, out of order). Your feedback helps the community!</string>
+    <string name="feedback_subject_header">Subject</string>
+    <string name="feedback_message_header">Message</string>
+    <string name="optional_parentheses">(optional)</string>
+    <string name="feedback_subject_placeholder">Enter or select subject…</string>
+    <string name="feedback_message_placeholder">Describe the problem or desired changes…</string>
+    <string name="feedback_subject_not_exist">Toilet does not exist</string>
+    <string name="feedback_subject_check">Check toilet</string>
+    <string name="feedback_subject_relocated">Toilet was relocated</string>
+    <string name="feedback_subject_belongs_elsewhere">Toilet belongs elsewhere</string>
+    <string name="feedback_submit_button">Send feedback</string>
+    <string name="feedback_sent_success">We received your feedback and will have a look on it soon</string>
+    <string name="error_sending_feedback">Error sending feedback</string>
+
+    <!-- Update Toilet -->
+    <string name="toilet_belongs_to_place">Toilet belongs to place</string>
+    <string name="toilet_name_optional">Toilet name (optional)</string>
+    <string name="features_header">Features:</string>
+    <string name="gender_separated_title">Gender-separated toilets available</string>
+    <string name="changing_table_title">Baby changing facility available</string>
+    <string name="wheelchair_access_title">Wheelchair accessible toilet available</string>
+    <string name="euro_key_title">Can be opened with a Euro key</string>
+    <string name="provide_opening_hours">Provide opening hours</string>
+    <string name="location_on_map_header">Location on the map</string>
+    <string name="selected_position">Selected position</string>
+    <string name="choose_this_position">Choose this location</string>
+    <string name="notes_header">Notes</string>
+    <string name="website_header">Website</string>
+    <string name="address_header">Address</string>
+    <string name="select_place">Select place</string>
+    <string name="no_place">None (standalone)</string>
+    <string name="toilet_name_label">Toilet name / description</string>
+    <string name="toilet_owner_label">Operator / Facility</string>
+    <string name="wheelchair_accessible_label">Wheelchair accessible / barrier-free</string>
+    <string name="save_changes_button">Save changes</string>
+    <string name="error_loading">Error loading</string>
+    <string name="error_saving">Error saving</string>
+
+    <!-- Compass -->
+    <string name="compass_title">Compass Navigation</string>
+    <string name="straight_ahead">Straight ahead</string>
+    <string name="slight_right">Slight right</string>
+    <string name="right">Right</string>
+    <string name="sharp_right">Sharp right</string>
+    <string name="behind_you">Behind you</string>
+    <string name="sharp_left">Sharp left</string>
+    <string name="left">Left</string>
+    <string name="slight_left">Slight left</string>
+    <string name="arrived">You arrived!</string>
+    <string name="open_in_maps">Open in external Maps</string>
+
+    <!-- Wizard -->
+    <string name="add_toilet_title">Add Toilet</string>
+    <string name="next">Next</string>
+    <string name="back">Back</string>
+    <string name="done">Done</string>
+    <string name="cancel_button">Cancel</string>
+    <string name="toilet_saved">Toilet saved</string>
+    <string name="thank_you">Thank You!</string>
+    <string name="saved_confirmation">Your information has been saved.</string>
+    <string name="wizard_company_banner">Company or municipality? – This way please</string>
+    <string name="wizard_company_dialog_title">Company or municipality?</string>
+    <string name="wizard_company_dialog_message">Would you like to add a larger number of toilets as a company, municipality or operator of multiple toilets?\n\nPlease feel free to contact us by email at hi@wc-info.org and send us your toilet data in any format (e.g. as CSV, Excel or text list). We would be happy to import these toilets for you!</string>
+    <string name="wizard_company_dialog_email">Send email</string>
+    <string name="wizard_step_indicator">Question %1$d of %2$d</string>
+    <string name="wizard_toilet_saved_badge">✓ Toilet saved</string>
+    <string name="wizard_saving">Saving toilet...</string>
+    <string name="wizard_save_toilet">Save toilet</string>
+    <string name="wizard_add_toilet_by_photo">Add toilet via photo</string>
+
+    <string name="wizard_q1_title">Does the toilet belong to one of these places?</string>
+    <string name="wizard_q1_subtitle">Choose the place to which the toilet belongs:</string>
+    <string name="wizard_q1_loading">Searching for nearby places...</string>
+    <string name="wizard_q1_none_of_these">None of these places</string>
+
+    <string name="wizard_q2_title">Where is the toilet located?</string>
+    <string name="wizard_q2_subtitle">Enter a short location description or designation:</string>
+    <string name="wizard_q2_placeholder">e.g. 1st floor near changing rooms</string>
+
+    <string name="wizard_q3_title">Are you currently outdoors directly in front of the toilet entrance?</string>
+    <string name="wizard_q3_subtitle">Then we can add your current position to the toilet to make navigation easier for others.</string>
+    <string name="wizard_q3_yes">Yes, use my position</string>
+    <string name="wizard_q3_no">No</string>
+
+    <string name="wizard_q4_title">Please choose the point on the map where the toilet is located</string>
+    <string name="wizard_q4_subtitle">Tap on the map or move the marker:</string>
+    <string name="wizard_q4_choose_location">Choose this location</string>
+
+    <string name="wizard_q5_title">Is the toilet separated by gender?</string>
+    <string name="wizard_q5_yes">Yes</string>
+    <string name="wizard_q5_no_unisex">No, Unisex</string>
+
+    <string name="wizard_q6_title">Is a wheelchair accessible toilet available?</string>
+    <string name="wizard_q6_yes">Yes</string>
+    <string name="wizard_q6_no">No</string>
+
+    <string name="wizard_q7_title">Can the door be opened with a Euro key?</string>
+    <string name="wizard_q7_subtitle">This information is often found near the lock.</string>
+    <string name="wizard_q7_yes">Yes</string>
+    <string name="wizard_q7_unknown">Not sure</string>
+    <string name="wizard_q7_no">No</string>
+
+    <string name="wizard_q8_title">Would you like to provide an address?</string>
+    <string name="wizard_q8_placeholder">Enter address</string>
+    <string name="wizard_q8_save">Save address</string>
+    <string name="wizard_q8_skip">No, continue</string>
+
+    <string name="wizard_q9_title">Would you like to specify opening hours?</string>
+    <string name="wizard_q9_subtitle">You can also upload a photo of the opening hours in the next step and we will do it for you.</string>
+    <string name="wizard_q9_yes">Yes, enter opening hours</string>
+    <string name="wizard_q9_no">No, no opening hours</string>
+    <string name="wizard_q9_edit_title">Set opening hours</string>
+    <string name="wizard_q9_edit_subtitle">Select weekdays and enter open and close times:</string>
+    <string name="wizard_q9_save">Save opening hours</string>
+    <string name="wizard_q9_add_period">Add another time period</string>
+    <string name="wizard_q9_period_n">Period %1$d</string>
+    <string name="wizard_q9_open_24h">Open 24 hours</string>
+    <string name="wizard_q9_opens_at">Opens at</string>
+    <string name="wizard_q9_closes_at">Closes at</string>
+    <string name="wizard_q9_preset_mo_fr">Mon–Fri</string>
+    <string name="wizard_q9_preset_sa_so">Sat–Sun</string>
+    <string name="wizard_q9_preset_daily">Daily</string>
+
+    <string name="wizard_q10_title">Is public access possible?</string>
+    <string name="wizard_q10_subtitle">State whether this toilet can be used without an admission ticket, membership, or purchase etc.</string>
+    <string name="wizard_q10_yes">Yes, public access possible</string>
+    <string name="wizard_q10_no">No, not freely accessible</string>
+
+    <string name="wizard_q11_title">Is access possible outside opening hours?</string>
+    <string name="wizard_q11_subtitle">e.g. if the toilet is accessible from the outside or via Euro key</string>
+    <string name="wizard_q11_yes">Yes, definitely possible</string>
+    <string name="wizard_q11_no">No or not sure</string>
+
+    <string name="wizard_q12_title">Is there storage space, coat hooks, etc.?</string>
+    <string name="wizard_q12_none">None</string>
+    <string name="wizard_q12_little">Little</string>
+    <string name="wizard_q12_much">Much</string>
+    <string name="wizard_q12_no_info">No info</string>
+
+    <string name="wizard_q13_title">Would you like to add photos?</string>
+    <string name="wizard_q13_select_photos">Select photos</string>
+    <string name="wizard_q13_select_photos_subtitle">Tap here to add photos</string>
+    <string name="wizard_q13_uploading">Uploading...</string>
+    <string name="wizard_q13_uploaded">Done</string>
+    <string name="wizard_q13_retry">Retry</string>
+
+    <string name="wizard_q14_title">Would you like to write anything else about this toilet?</string>
+    <string name="wizard_q14_placeholder">Enter comment or notes...</string>
+    <string name="wizard_q14_save">Save toilet</string>
+
+    <string name="wizard_celebration_title">Thank You!</string>
+    <string name="wizard_celebration_subtitle">Your information has been saved.</string>
+    <string name="wizard_cancel_dialog_title">Cancel adding toilet?</string>
+    <string name="wizard_cancel_dialog_message">Are you sure you want to cancel? Any information entered so far will not be saved.</string>
+    <string name="wizard_cancel_dialog_confirm">Discard &amp; Exit</string>
+    <string name="wizard_cancel_dialog_dismiss">Continue</string>
+
+    <!-- Widget Strings -->
+    <string name="widget_name">Emergency Toilet</string>
+    <string name="widget_description">Find and navigate instantly via compass to the nearest matching toilet with 1 tap.</string>
+    <string name="widget_notfall">EMERGENCY</string>
+    <string name="widget_wc">WC</string>
+    <string name="widget_title">Nearest Toilet</string>
+    <string name="widget_subtitle_compass">1-Tap Compass</string>
+    <string name="widget_wc_notfall">WC EMERGENCY</string>
+    <string name="widget_instant_nav">INSTANT NAVIGATION</string>
+    <string name="widget_tap_to_navigate">Tap to navigate</string>
+    <string name="widget_all_available_toilets">All available toilets</string>
+    <string name="widget_tag_open">Open</string>
+    <string name="widget_tag_only_public">Public only</string>
+    <string name="widget_tag_public_fallback">Public (>%1$dm fallback)</string>
+    <string name="widget_tag_wheelchair">Wheelchair accessible</string>
+    <string name="widget_tag_changing_table">Changing table</string>
+    <string name="widget_tag_separated">Separated</string>
+    <string name="widget_tag_euro_key">Euro-key</string>
+    <string name="widget_config_title">Emergency Filter</string>
+    <string name="widget_config_desc">Adjust which criteria are considered during urgent emergency navigation.</string>
+    <string name="widget_config_save">Save Widget</string>
+    <string name="widget_config_preview">Preview</string>
+    <string name="widget_config_size_small">Small (2x2)</string>
+    <string name="widget_config_size_medium">Medium (4x2)</string>
+    <string name="widget_config_fallback_desc">Navigate to a closer opened non-public toilet if the nearest public one is further away.</string>
+    <string name="widget_config_max_dist_title">Max. distance to public toilet: %1$d m</string>
+
+    <!-- Photo Lightbox & Deletion -->
+    <string name="delete_photo">Delete photo</string>
+    <string name="delete_photo_title">Delete photo?</string>
+    <string name="delete_photo_confirmation_message">Is this an inappropriate photo or do you have personal reasons to delete it? If you select \'Delete\', the photo will be deleted immediately and reviewed by us afterwards. We reserve the right to restore the photo if it is deemed appropriate and does not violate personal rights.</string>
+    <string name="delete">Delete</string>
+    <string name="cancel">Cancel</string>
+    <string name="photo_deleted_success">Photo deleted successfully</string>
+    <string name="no_photos_available">No photos available</string>
+</resources>
