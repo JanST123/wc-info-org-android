@@ -17,3 +17,4 @@ local.properties
 .kotlin
 *.DS_Store
 android_key
+app/release/*.aab
