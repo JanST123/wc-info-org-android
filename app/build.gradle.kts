@@ -15,7 +15,7 @@ android {
         applicationId = "de.wcinfo.app"
         minSdk = 26
         targetSdk = 36
-        versionCode = 201
+        versionCode = 203
         versionName = "2.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
