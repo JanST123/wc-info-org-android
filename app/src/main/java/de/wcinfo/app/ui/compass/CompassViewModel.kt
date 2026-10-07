@@ -55,6 +55,15 @@ class CompassViewModel(application: Application) : AndroidViewModel(application)
     }
 
     private fun startTracking(toilet: Toilet) {
+        // Fetch current location immediately
+        viewModelScope.launch {
+            val loc = locationTracker.getCurrentLocation()
+            if (loc != null) {
+                currentUserLocation = loc
+                updateCompassState(toilet)
+            }
+        }
+
         // Collect heading updates
         viewModelScope.launch {
             compassSensor.getHeadingUpdates().collect { heading ->
@@ -74,19 +83,18 @@ class CompassViewModel(application: Application) : AndroidViewModel(application)
 
     private fun updateCompassState(toilet: Toilet) {
         val userLoc = currentUserLocation
-        val distanceMeters = if (userLoc != null) {
+        val userLat = userLoc?.latitude ?: 52.5100
+        val userLon = userLoc?.longitude ?: 13.4000
+
+        val distanceMeters = if (userLoc != null || toilet.distance == null || toilet.distance <= 0.0) {
             val results = FloatArray(1)
-            Location.distanceBetween(userLoc.latitude, userLoc.longitude, toilet.lat, toilet.lon, results)
+            Location.distanceBetween(userLat, userLon, toilet.lat, toilet.lon, results)
             results[0]
         } else {
             ((toilet.distance ?: 0.0) * 1000.0).toFloat()
         }
 
-        val bearing = if (userLoc != null) {
-            CompassSensorManager.calculateBearing(userLoc.latitude, userLoc.longitude, toilet.lat, toilet.lon)
-        } else {
-            0f
-        }
+        val bearing = CompassSensorManager.calculateBearing(userLat, userLon, toilet.lat, toilet.lon)
 
         val relativeAngle = (bearing - currentHeading + 360f) % 360f
 
