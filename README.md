@@ -65,3 +65,23 @@ Built using **Kotlin**, **Jetpack Compose**, and **Material 3**.
 1. Open this directory in **Android Studio**.
 2. Android Studio will automatically recognize the Gradle project and sync dependencies using `gradle/libs.versions.toml`.
 3. Select your target device or emulator (Android 8.0+ / API 26+) and click **Run** (`▶`).
+
+---
+
+## 📸 Play Store Screenshots
+
+Automated screenshot capture is available via `scripts/capture_screenshots.py`. It uses ADB to set Demo Mode (clean status bar, standard time 09:41), navigates using deep links, mocks locations, and organizes screenshots into German and English sets for both Phone (Portrait) and Tablet (Landscape).
+
+```bash
+# Capture all screenshots (Phone + Tablet, DE + EN)
+python3 scripts/capture_screenshots.py
+
+# Phone only or Tablet only
+python3 scripts/capture_screenshots.py --phone-only
+python3 scripts/capture_screenshots.py --tablet-only
+
+# Specific locale
+python3 scripts/capture_screenshots.py --locale de-DE
+python3 scripts/capture_screenshots.py --locale en-US
+```
+
