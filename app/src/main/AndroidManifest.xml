@@ -65,15 +65,15 @@
                     android:scheme="wcinfo" />
             </intent-filter>
 
-            <!-- Web Deep Linking: https://wc-info.org/Toilets/... -->
+            <!-- Web Deep Linking / Android App Links: https://wc-info.org and https://www.wc-info.org -->
             <intent-filter android:autoVerify="true">
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <category android:name="android.intent.category.BROWSABLE" />
-                <data
-                    android:host="wc-info.org"
-                    android:pathPrefix="/Toilets"
-                    android:scheme="https" />
+                <data android:scheme="https" />
+                <data android:scheme="http" />
+                <data android:host="wc-info.org" />
+                <data android:host="www.wc-info.org" />
             </intent-filter>
         </activity>
 

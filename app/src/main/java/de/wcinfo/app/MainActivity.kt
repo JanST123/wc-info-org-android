@@ -14,6 +14,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.compose.rememberNavController
+import de.wcinfo.app.util.DeepLinkResolver
+import de.wcinfo.app.util.ResolvedDeepLink
 import de.wcinfo.app.data.location.LocationTracker
 import de.wcinfo.app.data.model.ToiletFilterSettings
 import de.wcinfo.app.data.repository.ToiletRepository
@@ -66,15 +68,7 @@ class MainActivity : ComponentActivity() {
                 }
 
                 LaunchedEffect(Unit) {
-                    handleIntent(intent) { route ->
-                        if (route != "home" && route != Screen.Home.route) {
-                            try {
-                                navController.navigate(route)
-                            } catch (e: Exception) {
-                                e.printStackTrace()
-                            }
-                        }
-                    }
+                    handleIntent(intent)
                 }
             }
         }
@@ -83,68 +77,59 @@ class MainActivity : ComponentActivity() {
     override fun onNewIntent(intent: Intent) {
         super.onNewIntent(intent)
         setIntent(intent)
-        onNavigateCallback?.let { onNav ->
-            handleIntent(intent, onNav)
-        }
+        handleIntent(intent)
     }
 
-    private fun handleIntent(intent: Intent?, onNavigate: (String) -> Unit) {
+    private fun handleIntent(intent: Intent?) {
         val uri: Uri = intent?.data ?: return
 
-        // Deep Link: wcinfo://route
-        if (uri.scheme == "wcinfo" && uri.host == "route") {
-            val path = uri.getQueryParameter("path")
-            if (path != null) {
-                try {
-                    onNavigate(path)
-                } catch (e: Exception) {
-                    e.printStackTrace()
+        lifecycleScope.launch {
+            val resolved = DeepLinkResolver.resolveUri(applicationContext, uri) ?: return@launch
+            when (resolved) {
+                is ResolvedDeepLink.Home -> {
+                    onNavigateCallback?.invoke(Screen.Home.route)
                 }
-                return
-            }
-        }
-
-        // Deep Link: wcinfo://pin-widget
-        if (uri.scheme == "wcinfo" && uri.host == "pin-widget") {
-            val appWidgetManager = getSystemService(android.appwidget.AppWidgetManager::class.java)
-            val myProvider = android.content.ComponentName(this, de.wcinfo.app.widget.UrgentToiletWidgetReceiver::class.java)
-            if (appWidgetManager.isRequestPinAppWidgetSupported) {
-                appWidgetManager.requestPinAppWidget(myProvider, null, null)
-            }
-            return
-        }
-
-        // Deep Link 1: wcinfo://urgent-navigate
-        if (uri.scheme == "wcinfo" && (uri.host == "urgent-navigate" || uri.path?.contains("urgent-navigate") == true)) {
-            val filterSettings = ToiletFilterSettings.fromUri(uri)
-            lifecycleScope.launch {
-                val location = locationTracker.getCurrentLocation()
-                if (location != null) {
-                    val result = repository.findEmergencyToilet(location.latitude, location.longitude, filterSettings)
-                    result.onSuccess { (toilet, isFallback) ->
-                        if (isFallback) {
-                            Toast.makeText(this@MainActivity, "Nächste geöffnete (nicht-öffentliche) Toilette gefunden.", Toast.LENGTH_LONG).show()
-                        }
-                        onNavigate(Screen.Compass.createRoute(toilet.id))
-                    }.onFailure {
-                        Toast.makeText(this@MainActivity, "Keine geöffnete Toilette im Umkreis gefunden.", Toast.LENGTH_SHORT).show()
+                is ResolvedDeepLink.Results -> {
+                    val resultsRoute = Screen.Results.createRoute(
+                        lat = resolved.lat,
+                        lon = resolved.lon,
+                        name = resolved.name,
+                        toiletId = resolved.toiletId
+                    )
+                    onNavigateCallback?.invoke(resultsRoute)
+                    if (resolved.openDetail && resolved.toiletId != null) {
+                        onNavigateCallback?.invoke(Screen.Detail.createRoute(resolved.toiletId))
                     }
-                } else {
-                    Toast.makeText(this@MainActivity, "Standort nicht verfügbar.", Toast.LENGTH_SHORT).show()
                 }
-            }
-            return
-        }
-
-        // Deep Link 2: https://wc-info.org/Toilets/{placeSlug}---{placeId}/{toiletSlug}---{toiletId}
-        if (uri.scheme == "https" && uri.host == "wc-info.org" && uri.path?.startsWith("/Toilets") == true) {
-            val segments = uri.pathSegments
-            val lastSegment = segments.lastOrNull()
-            if (lastSegment != null && lastSegment.contains("---")) {
-                val parts = lastSegment.split("---")
-                val toiletId = parts.lastOrNull()?.toIntOrNull()
-                if (toiletId != null) {
-                    onNavigate(Screen.Detail.createRoute(toiletId))
+                is ResolvedDeepLink.Detail -> {
+                    onNavigateCallback?.invoke(Screen.Detail.createRoute(resolved.toiletId))
+                }
+                is ResolvedDeepLink.DirectRoute -> {
+                    onNavigateCallback?.invoke(resolved.route)
+                }
+                is ResolvedDeepLink.PinWidget -> {
+                    val appWidgetManager = getSystemService(android.appwidget.AppWidgetManager::class.java)
+                    val myProvider = android.content.ComponentName(this@MainActivity, de.wcinfo.app.widget.UrgentToiletWidgetReceiver::class.java)
+                    if (appWidgetManager.isRequestPinAppWidgetSupported) {
+                        appWidgetManager.requestPinAppWidget(myProvider, null, null)
+                    }
+                }
+                is ResolvedDeepLink.UrgentNavigate -> {
+                    val filterSettings = ToiletFilterSettings.fromUri(resolved.uri)
+                    val location = locationTracker.getCurrentLocation()
+                    if (location != null) {
+                        val result = repository.findEmergencyToilet(location.latitude, location.longitude, filterSettings)
+                        result.onSuccess { (toilet, isFallback) ->
+                            if (isFallback) {
+                                Toast.makeText(this@MainActivity, "Nächste geöffnete (nicht-öffentliche) Toilette gefunden.", Toast.LENGTH_LONG).show()
+                            }
+                            onNavigateCallback?.invoke(Screen.Compass.createRoute(toilet.id))
+                        }.onFailure {
+                            Toast.makeText(this@MainActivity, "Keine geöffnete Toilette im Umkreis gefunden.", Toast.LENGTH_SHORT).show()
+                        }
+                    } else {
+                        Toast.makeText(this@MainActivity, "Standort nicht verfügbar.", Toast.LENGTH_SHORT).show()
+                    }
                 }
             }
         }
